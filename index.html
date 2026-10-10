@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Paneles solares, instalaciones eléctricas y antenas WiFi en San Luis y provincias vecinas. Calculá tu ahorro y pedí presupuesto sin cargo.">
+<title>LuSolarPin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+html{scroll-behavior:smooth}
+[hidden]{display:none!important}
+img{max-width:100%}
+/* Layout: hero con calculadora solar a la derecha; servicios en 3 columnas; franja de combos; proceso; zona; FAQ; contacto. Botón flotante de WhatsApp. */
+:root{
+  --bg:#f6f8fb; --surface:#ffffff; --ink:#14202e; --muted:#566476; --line:#dbe2ea;
+  --sun:#f5b301; --sun-ink:#1a1405; --sky:#1f6fb2; --sky-soft:#e3eef8; --wa:#1f9d55;
+  --display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --r:14px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0c131c; --surface:#131d29; --ink:#e8eef5; --muted:#9aa8b8; --line:#243243;
+  --sun:#ffc531; --sun-ink:#1a1405; --sky:#6bb0ec; --sky-soft:#16283a; --wa:#3cc274; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0c131c; --surface:#131d29; --ink:#e8eef5; --muted:#9aa8b8; --line:#243243;
+  --sun:#ffc531; --sun-ink:#1a1405; --sky:#6bb0ec; --sky-soft:#16283a; --wa:#3cc274; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.6 var(--body);padding-inline:16px}
+.wrap{max-width:1120px;margin-inline:auto}
+h1,h2,h3{font-family:var(--display);line-height:1.05;text-wrap:balance;margin:0}
+h2{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:850;font-stretch:80%;letter-spacing:-.01em}
+h3{font-size:1.25rem;font-weight:750}
+p{margin:0}
+a{color:var(--sky)}
+.eyebrow{font:600 .78rem/1 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+section{padding-block:72px;display:grid;gap:32px}
+.sec-head{display:grid;gap:12px;max-width:640px}
+.sec-head p{color:var(--muted)}
+:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+
+/* nav */
+header.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);margin-inline:-16px;padding:12px 16px}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;font:900 1.35rem/1 var(--display);font-stretch:90%;color:var(--ink);text-decoration:none}
+.logo b{color:var(--sun);text-shadow:0 0 1px var(--sun-ink)}
+.nav ul{display:flex;gap:22px;list-style:none;margin:0;padding:0}
+.nav ul a{color:var(--ink);text-decoration:none;font-weight:500}
+.nav ul a:hover{color:var(--sky)}
+@media (max-width:760px){.nav ul{display:none}}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:12px 22px;font:600 1rem/1 var(--body);cursor:pointer;text-decoration:none;transition:transform .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn-sun{background:var(--sun);color:var(--sun-ink)}
+.btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn-wa{background:var(--wa);color:#fff}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:center;padding-block:56px 72px}
+.hero > *{min-width:0}
+@media (max-width:900px){.hero{grid-template-columns:1fr}}
+.hero h1{font-size:clamp(2.6rem,7vw,5rem);font-weight:900;font-stretch:72%;letter-spacing:-.02em;text-transform:uppercase}
+.hero h1 span{color:var(--sun);-webkit-text-stroke:1px var(--sun-ink)}
+.hero-copy{display:grid;gap:22px}
+.hero-copy p.lead{font-size:1.15rem;color:var(--muted);max-width:52ch}
+.ctas{display:flex;flex-wrap:wrap;gap:12px}
+.facts{display:flex;flex-wrap:wrap;gap:24px;padding-top:8px}
+.facts div{display:grid}
+.facts strong{font:500 1.4rem/1.2 var(--mono);color:var(--ink)}
+.facts span{font-size:.85rem;color:var(--muted)}
+
+/* calculator */
+.calc{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:28px;display:grid;gap:18px;box-shadow:0 20px 50px -30px rgb(20 32 46 / .35);position:relative;overflow:hidden}
+.calc::before{content:"";position:absolute;inset:0 0 auto 0;height:6px;background:repeating-linear-gradient(90deg,var(--sky) 0 38px,transparent 38px 42px)}
+.calc h3{font-size:1.4rem}
+.field{display:grid;gap:6px}
+.field label{font-weight:600;font-size:.92rem}
+.field small{color:var(--muted);font-size:.8rem}
+.range-row{display:flex;align-items:center;gap:12px}
+.range-row input[type=range]{flex:1;accent-color:var(--sun)}
+.range-row output{font:500 1.05rem var(--mono);min-width:96px;text-align:right}
+select,input[type=text],input[type=tel],textarea{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px}
+.results{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+.results div{background:var(--sky-soft);padding:14px;display:grid;gap:2px}
+.results strong{font:500 1.35rem/1.2 var(--mono);font-variant-numeric:tabular-nums}
+.results span{font-size:.8rem;color:var(--muted)}
+.lbl{font-weight:600;font-size:.92rem}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);border:1.5px solid var(--line);border-radius:10px;overflow:hidden;background:var(--bg)}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg label{text-align:center;padding:9px 6px;font-weight:600;font-size:.9rem;cursor:pointer;color:var(--muted)}
+.seg label + input + label{border-left:1.5px solid var(--line)}
+.seg input:checked + label{background:var(--sun);color:var(--sun-ink)}
+.seg input:focus-visible + label{outline:3px solid var(--sky);outline-offset:-3px}
+.seasons{display:grid;gap:8px}
+.srow{display:grid;grid-template-columns:78px 1fr 92px;align-items:center;gap:10px;font-size:.88rem}
+.srow b{font:500 .9rem var(--mono);text-align:right;font-variant-numeric:tabular-nums}
+.bar{height:10px;border-radius:5px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--sun);border-radius:5px;transition:width .3s}
+.srow.cons .bar i{background:var(--sky)}
+.batlink{font-weight:600;text-align:center}
+.bat{display:grid;grid-template-columns:1.4fr 1fr;gap:24px;align-items:start}
+.bat > *{min-width:0}
+@media (max-width:900px){.bat{grid-template-columns:1fr}}
+.bat-loads,.bat-side{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:24px;display:grid;gap:12px}
+.bat-side{gap:18px}
+.lhead,.lrow{display:grid;grid-template-columns:minmax(0,1fr) 56px 72px 72px 64px 32px;gap:8px;align-items:center}
+.lhead{font-size:.75rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.lhead span:nth-child(n+2){text-align:center}
+#loads{display:grid;gap:8px}
+.lrow input{width:100%;font:inherit;font-size:.92rem;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:8px;padding:7px 8px}
+.lrow input[type=number]{text-align:center;font-family:var(--mono);font-size:.88rem;-moz-appearance:textfield}
+.lrow input::-webkit-inner-spin-button{-webkit-appearance:none}
+.lrow output{font:500 .88rem var(--mono);text-align:right;font-variant-numeric:tabular-nums}
+.lrow button{border:0;background:transparent;color:var(--muted);font-size:1.2rem;cursor:pointer;border-radius:6px;height:32px}
+.lrow button:hover{color:var(--ink);background:var(--line)}
+@media (max-width:560px){
+  .lhead{display:none}
+  .lrow{grid-template-columns:repeat(3,1fr) 32px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+  .lrow .nm{grid-column:1 / -1}
+  .lrow output{grid-column:1 / 4;text-align:left}
+  .lrow input[type=number]::placeholder{color:var(--muted)}
+}
+.addrow{justify-self:start;padding:9px 16px;font-size:.9rem}
+.batres{display:grid;gap:14px;border-top:1px solid var(--line);padding-top:18px}
+.batres .big{display:grid;gap:4px;background:var(--sun);color:var(--sun-ink);border-radius:12px;padding:16px}
+.batres .big span{font-size:.85rem;font-weight:600}
+.batres .big strong{font:500 2rem/1.1 var(--mono)}
+.batres dl{display:grid;grid-template-columns:1fr auto;gap:6px 12px;margin:0;font-size:.92rem}
+.batres dt{color:var(--muted)}
+.batres dd{margin:0;font:500 .92rem var(--mono);text-align:right;font-variant-numeric:tabular-nums}
+.volts{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.volts div{background:var(--sky-soft);padding:12px;display:grid;gap:2px;text-align:center}
+.volts b{font:500 1.15rem var(--mono);font-variant-numeric:tabular-nums}
+.volts span{font-size:.8rem;color:var(--muted)}
+.calc .note,.bat .note{font-size:.78rem;color:var(--muted)}
+
+/* services */
+.services{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media (max-width:900px){.services{grid-template-columns:1fr}}
+.svc{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:28px;display:grid;gap:14px;align-content:start}
+.svc .ico{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;background:var(--sky-soft);color:var(--sky)}
+.svc.solar .ico{background:var(--sun);color:var(--sun-ink)}
+.svc p{color:var(--muted)}
+.svc ul{margin:0;padding-left:18px;display:grid;gap:4px}
+.svc li::marker{color:var(--sun)}
+
+/* combos */
+.combos-band{background:var(--ink);color:var(--bg);margin-inline:-16px;padding-inline:16px}
+.combos-band .eyebrow,.combos-band .sec-head p{color:color-mix(in srgb,var(--bg) 70%,var(--ink))}
+.combos{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media (max-width:900px){.combos{grid-template-columns:1fr}}
+.combo{border:1px solid color-mix(in srgb,var(--bg) 22%,var(--ink));border-radius:var(--r);padding:26px;display:grid;gap:12px;align-content:start}
+.combo.feat{border-color:var(--sun);box-shadow:inset 0 0 0 1px var(--sun)}
+.combo .tag{justify-self:start;font:600 .72rem/1 var(--body);letter-spacing:.1em;text-transform:uppercase;background:var(--sun);color:var(--sun-ink);padding:6px 10px;border-radius:999px}
+.combo h3{font-size:1.5rem;font-stretch:85%}
+.combo p{color:color-mix(in srgb,var(--bg) 75%,var(--ink))}
+.combo ul{margin:0;padding-left:18px;display:grid;gap:4px}
+
+/* process */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;counter-reset:s;list-style:none;padding:0;margin:0}
+@media (max-width:900px){.steps{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:520px){.steps{grid-template-columns:1fr}}
+.steps li{display:grid;gap:8px;border-top:3px solid var(--sun);padding-top:16px}
+.steps li::before{counter-increment:s;content:"Paso " counter(s);font:500 .8rem var(--mono);color:var(--muted)}
+.steps p{color:var(--muted);font-size:.95rem}
+
+/* zone */
+.zone{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.zone > *{min-width:0}
+@media (max-width:900px){.zone{grid-template-columns:1fr}}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid var(--line);border-radius:999px;padding:6px 14px;font-weight:500;background:var(--surface)}
+.chip.main{border-color:var(--sun);background:var(--sun);color:var(--sun-ink)}
+.sunbox{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:24px;display:grid;gap:10px}
+.sunbox strong{font:500 2.6rem/1 var(--mono);color:var(--ink)}
+.sunbox p{color:var(--muted)}
+
+/* faq */
+.faq{display:grid;gap:10px;max-width:820px}
+details{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 20px}
+summary{font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px}
+summary::after{content:"+";font:500 1.2rem/1 var(--mono);color:var(--sky)}
+details[open] summary::after{content:"–"}
+details p{color:var(--muted);padding-top:10px}
+
+/* contact */
+.contact{display:grid;grid-template-columns:1fr 1.2fr;gap:40px}
+.contact > *{min-width:0}
+@media (max-width:900px){.contact{grid-template-columns:1fr}}
+form{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:28px;display:grid;gap:16px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:520px){.row2{grid-template-columns:1fr}}
+.preview{display:grid;gap:10px;background:var(--sky-soft);border-radius:12px;padding:16px}
+.preview pre{margin:0;white-space:pre-wrap;font:500 .85rem/1.5 var(--mono)}
+.preview .actions{display:flex;flex-wrap:wrap;gap:10px}
+.pending{font-size:.85rem;color:var(--muted)}
+
+footer{border-top:1px solid var(--line);padding-block:28px 96px;color:var(--muted);font-size:.9rem;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
+
+.fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:20;width:58px;height:58px;border-radius:50%;background:var(--wa);color:#fff;display:grid;place-items:center;box-shadow:0 10px 24px -8px rgb(0 0 0 / .45)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="#inicio">
+      <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="11" r="6" fill="var(--sun)"/><path d="M4 28 9 18h14l5 10Z" fill="var(--sky)"/><path d="M12 18l-2 10M20 18l2 10M6.5 23h19" stroke="var(--bg)" stroke-width="1.5"/></svg>
+      Lu<b>Solar</b>Pin
+    </a>
+    <ul>
+      <li><a href="#servicios">Servicios</a></li>
+      <li><a href="#combos">Combos</a></li>
+      <li><a href="#zona">Zona</a></li>
+      <li><a href="#faq">Preguntas</a></li>
+    </ul>
+    <a class="btn btn-sun" href="#contacto">Cotizá gratis</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="hero" id="inicio">
+    <div class="hero-copy">
+      <span class="eyebrow">Energía solar · Electricidad · Redes — San Luis</span>
+      <h1>Que el sol de San Luis <span>pague</span> tu luz</h1>
+      <p class="lead">Instalamos paneles solares, hacemos tu instalación eléctrica segura y llevamos internet por antena a donde no llega el cable. Casas, comercios, campos y quintas.</p>
+      <div class="ctas">
+        <a class="btn btn-sun" href="#contacto">Pedir visita técnica</a>
+        <a class="btn btn-ghost" href="#calculadora">Calcular mi ahorro</a>
+      </div>
+      <div class="facts">
+        <div><strong>+5,5 h</strong><span>de sol pico por día en la región</span></div>
+        <div><strong>25 años</strong><span>de vida útil de un panel</span></div>
+        <div><strong>1 equipo</strong><span>para energía, luz e internet</span></div>
+      </div>
+    </div>
+
+    <div class="calc" id="calculadora">
+      <h3>¿Cuántos paneles necesitás?</h3>
+      <div class="field">
+        <label for="kwh">Consumo mensual</label>
+        <div class="range-row"><input id="kwh" type="range" min="100" max="1500" step="10" value="350"><output id="kwhOut">350 kWh</output></div>
+        <small>Lo encontrás en tu factura de luz, en la línea de “consumo” o “energía activa”.</small>
+      </div>
+      <div class="field">
+        <label for="cover">¿Qué parte querés cubrir con sol?</label>
+        <div class="range-row"><input id="cover" type="range" min="30" max="100" step="5" value="80"><output id="coverOut">80 %</output></div>
+      </div>
+      <div class="field">
+        <label for="tipo">Tipo de sistema</label>
+        <select id="tipo">
+          <option value="red">Conectado a la red (on-grid)</option>
+          <option value="aislado">Aislado con baterías (campo, sin red)</option>
+          <option value="hibrido">Híbrido (red + baterías de respaldo)</option>
+        </select>
+      </div>
+      <div class="field">
+        <span class="lbl" id="seasonLbl">Calcular pensando en</span>
+        <div class="seg" role="radiogroup" aria-labelledby="seasonLbl">
+          <input type="radio" name="season" id="sAnual" value="anual" checked><label for="sAnual">Todo el año</label>
+          <input type="radio" name="season" id="sVerano" value="verano"><label for="sVerano">Verano</label>
+          <input type="radio" name="season" id="sInvierno" value="invierno"><label for="sInvierno">Invierno</label>
+        </div>
+        <small id="seasonHint">En invierno hay menos horas de sol y hacen falta más paneles para cubrir lo mismo.</small>
+      </div>
+      <div class="results" aria-live="polite">
+        <div><strong id="rPanels">–</strong><span>paneles de 550 W</span></div>
+        <div><strong id="rKwp">–</strong><span>potencia del sistema</span></div>
+        <div><strong id="rArea">–</strong><span>superficie de techo aprox.</span></div>
+        <div><strong id="rCo2">–</strong><span>CO₂ evitado por año</span></div>
+      </div>
+      <div class="seasons" aria-live="polite">
+        <span class="eyebrow">Lo que generan estos paneles por mes</span>
+        <div class="srow"><span>Verano</span><div class="bar"><i id="bVer"></i></div><b id="gVer">–</b></div>
+        <div class="srow"><span>Invierno</span><div class="bar"><i id="bInv"></i></div><b id="gInv">–</b></div>
+        <div class="srow cons"><span>Tu consumo</span><div class="bar"><i id="bCon"></i></div><b id="gCon">–</b></div>
+      </div>
+      <p class="note" id="rNote">Estimación orientativa. En la visita medimos tu techo, la orientación y las sombras para darte el número exacto.</p>
+      <a class="btn btn-sun" href="#contacto" id="calcCta">Quiero esta cotización</a>
+      <a class="batlink" href="#baterias" id="batLink" hidden>Calcular las baterías para este sistema ↓</a>
+    </div>
+  </div>
+
+  <section id="baterias">
+    <div class="sec-head">
+      <span class="eyebrow">Calculadora de baterías</span>
+      <h2>¿Cuánta batería necesitás para pasar la noche?</h2>
+      <p>De noche los paneles no generan, así que las baterías tienen que sostener lo que queda prendido. Casi siempre son la heladera y el freezer, y las luces solo algunas horas. Cargá lo que usás y te decimos cuánta energía hay que guardar.</p>
+    </div>
+    <div class="bat">
+      <div class="bat-loads">
+        <div class="lhead"><span>Equipo</span><span>Cant.</span><span>Watts</span><span>Horas de noche</span><span>Wh</span><span></span></div>
+        <div id="loads"></div>
+        <button class="btn btn-ghost addrow" type="button" id="addLoad">+ Agregar equipo</button>
+        <p class="note">Para heladera y freezer usamos el consumo <b>promedio</b>, no el de arranque, porque el motor se prende y se apaga. Si tenés la etiqueta de eficiencia, dividí los kWh/año por 8,76 y obtenés los watts promedio.</p>
+      </div>
+      <div class="bat-side">
+        <div class="field">
+          <label for="nightH">Horas sin sol</label>
+          <div class="range-row"><input id="nightH" type="range" min="10" max="16" step="1" value="14"><output id="nightHOut">14 h</output></div>
+          <small>En invierno en San Luis son unas 14 horas desde que se va el sol hasta que los paneles vuelven a rendir.</small>
+        </div>
+        <div class="field">
+          <label for="days">Días de autonomía</label>
+          <div class="range-row"><input id="days" type="range" min="1" max="3" step="0.5" value="1"><output id="daysOut">1 noche</output></div>
+          <small>Más días cubren jornadas nubladas seguidas, pero suben el costo.</small>
+        </div>
+        <div class="field">
+          <label for="chem">Tipo de batería</label>
+          <select id="chem">
+            <option value="0.9">Litio LiFePO₄ (usa hasta 90 %)</option>
+            <option value="0.5">Plomo-ácido o gel (usa hasta 50 %)</option>
+          </select>
+        </div>
+        <div class="batres" aria-live="polite">
+          <div class="big"><span>Banco de baterías recomendado</span><strong id="bNominal">–</strong></div>
+          <dl>
+            <dt>Consumo de la noche</dt><dd id="bNight">–</dd>
+            <dt>Energía útil a guardar</dt><dd id="bUsable">–</dd>
+            <dt>Consumo promedio del día completo</dt><dd id="bDay">–</dd>
+            <dt>Pico si todo está prendido</dt><dd id="bPeak">–</dd>
+          </dl>
+          <span class="eyebrow">Equivale a</span>
+          <div class="volts">
+            <div><b id="b12">–</b><span>a 12 V</span></div>
+            <div><b id="b24">–</b><span>a 24 V</span></div>
+            <div><b id="b48">–</b><span>a 48 V</span></div>
+          </div>
+          <p class="note" id="bWarn"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="servicios">
+    <div class="sec-head">
+      <span class="eyebrow">Servicios</span>
+      <h2>Tres oficios, un solo técnico de confianza</h2>
+      <p>Muchas veces el panel, el tablero y el router terminan en el mismo trabajo. Lo resolvemos todo junto, sin tener que coordinar a tres personas distintas.</p>
+    </div>
+    <div class="services">
+      <article class="svc solar">
+        <div class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></div>
+        <h3>Paneles solares</h3>
+        <p>Sistemas a medida para bajar la factura o para tener energía donde no hay red.</p>
+        <ul>
+          <li>On-grid para casas y comercios</li>
+          <li>Equipos aislados para campos y puestos</li>
+          <li>Bombeo solar de agua</li>
+          <li>Termotanques solares</li>
+          <li>Asesoramiento para generación distribuida</li>
+        </ul>
+      </article>
+      <article class="svc">
+        <div class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></div>
+        <h3>Instalaciones eléctricas</h3>
+        <p>Obras nuevas, ampliaciones y arreglos con materiales normalizados.</p>
+        <ul>
+          <li>Tableros con térmicas y disyuntor</li>
+          <li>Puesta a tierra y medición</li>
+          <li>Instalaciones monofásicas y trifásicas</li>
+          <li>Iluminación LED interior y exterior</li>
+          <li>Cargadores para autos eléctricos</li>
+        </ul>
+      </article>
+      <article class="svc">
+        <div class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0M2 9a15 15 0 0 1 20 0"/><circle cx="12" cy="19.5" r="1.2" fill="currentColor"/></svg></div>
+        <h3>Antenas WiFi y redes</h3>
+        <p>Internet estable en casas grandes, campos y negocios.</p>
+        <ul>
+          <li>Enlaces punto a punto de varios km</li>
+          <li>Internet rural y satelital</li>
+          <li>WiFi mallado para toda la casa</li>
+          <li>Cableado de red para oficinas</li>
+          <li>Cámaras de seguridad IP</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+</main>
+
+<div class="combos-band">
+  <section class="wrap" id="combos">
+    <div class="sec-head">
+      <span class="eyebrow">Combos</span>
+      <h2>Paquetes pensados para cómo vivís</h2>
+      <p>Juntar trabajos ahorra viajes, materiales y tiempo. Por eso cuesta menos que contratarlos por separado.</p>
+    </div>
+    <div class="combos">
+      <article class="combo">
+        <h3>Casa Solar</h3>
+        <p>Para la casa en la ciudad que quiere pagar menos luz.</p>
+        <ul><li>Sistema on-grid</li><li>Revisión del tablero y puesta a tierra</li><li>Monitoreo desde el celular</li></ul>
+      </article>
+      <article class="combo feat">
+        <span class="tag">El más pedido</span>
+        <h3>Campo Conectado</h3>
+        <p>Para el campo, el puesto o la quinta, lejos de la red.</p>
+        <ul><li>Equipo solar aislado con baterías</li><li>Enlace de internet por antena</li><li>Cámaras para vigilar a distancia</li></ul>
+      </article>
+      <article class="combo">
+        <h3>Comercio Sin Cortes</h3>
+        <p>Para el negocio que no puede quedarse sin luz ni internet.</p>
+        <ul><li>Sistema híbrido con respaldo</li><li>Red cableada y WiFi para clientes</li><li>Iluminación LED</li></ul>
+      </article>
+    </div>
+  </section>
+</div>
+
+<div class="wrap">
+  <section>
+    <div class="sec-head">
+      <span class="eyebrow">Cómo trabajamos</span>
+      <h2>De la consulta al primer kWh</h2>
+    </div>
+    <ol class="steps">
+      <li><h3>Consulta</h3><p>Nos escribís por WhatsApp con una foto de tu factura y de tu techo.</p></li>
+      <li><h3>Visita técnica</h3><p>Medimos, revisamos la instalación y vemos sombras y orientación.</p></li>
+      <li><h3>Presupuesto</h3><p>Te pasamos un presupuesto por escrito, detallado y sin letra chica.</p></li>
+      <li><h3>Instalación</h3><p>Instalamos, probamos y te explicamos cómo funciona. Después hacemos seguimiento.</p></li>
+    </ol>
+  </section>
+
+  <section id="zona">
+    <div class="zone">
+      <div class="sec-head">
+        <span class="eyebrow">Zona de trabajo</span>
+        <h2>San Luis y provincias vecinas</h2>
+        <p>Base en San Luis. Viajamos a toda la provincia y a las provincias limítrofes. Para trabajos lejanos coordinamos fecha y combinamos visitas.</p>
+        <div class="chips">
+          <span class="chip main">San Luis</span><span class="chip">Villa Mercedes</span><span class="chip">Merlo</span><span class="chip">Juana Koslay</span><span class="chip">La Punta</span><span class="chip">Córdoba</span><span class="chip">Mendoza</span><span class="chip">San Juan</span><span class="chip">La Pampa</span>
+        </div>
+      </div>
+      <div class="sunbox">
+        <span class="eyebrow">Por qué acá conviene</span>
+        <strong>≈ 5,5 HSP</strong>
+        <p>Cuyo y el centro del país tienen de los mejores niveles de radiación solar de Argentina, con muchos días despejados al año. Cada panel instalado acá produce más que el mismo panel en otras regiones.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="sec-head">
+      <span class="eyebrow">Preguntas frecuentes</span>
+      <h2>Lo que más nos preguntan</h2>
+    </div>
+    <div class="faq">
+      <details><summary>¿Qué pasa los días nublados o a la noche?</summary><p>En un sistema conectado a la red, cuando los paneles no alcanzan tomás energía de la red como siempre. En un sistema con baterías, usás lo que guardaste durante el día.</p></details>
+      <details><summary>¿Puedo vender a la red lo que me sobra?</summary><p>Con la ley de generación distribuida podés inyectar excedentes y recibir un crédito en la factura. Te asesoramos con el trámite ante tu distribuidora, según la provincia.</p></details>
+      <details><summary>¿Cuánto mantenimiento necesitan los paneles?</summary><p>Muy poco: limpieza de polvo un par de veces al año y una revisión de conexiones. Los paneles duran más de 25 años.</p></details>
+      <details><summary>¿Llega internet a mi campo?</summary><p>En muchos casos sí, con un enlace por antena desde un punto con señal, o por satélite. En la visita hacemos un relevamiento de línea de vista.</p></details>
+      <details><summary>¿Dan garantía por el trabajo?</summary><p>Sí. Los equipos tienen la garantía del fabricante y nuestro trabajo de instalación tiene garantía por escrito.</p></details>
+    </div>
+  </section>
+
+  <section id="contacto">
+    <div class="contact">
+      <div class="sec-head">
+        <span class="eyebrow">Contacto</span>
+        <h2>Pedí tu presupuesto sin cargo</h2>
+        <p>Completá estos datos y armamos el mensaje para que nos lo mandes por WhatsApp. Si podés, sumá una foto de tu factura de luz.</p>
+        <p class="pending" id="waStatus"></p>
+      </div>
+      <form id="form" novalidate>
+        <div class="row2">
+          <div class="field"><label for="fName">Nombre</label><input id="fName" type="text" autocomplete="name" placeholder="Ej.: Martina"></div>
+          <div class="field"><label for="fCity">Localidad</label><input id="fCity" type="text" placeholder="Ej.: Villa Mercedes"></div>
+        </div>
+        <div class="field"><label for="fSvc">¿Qué necesitás?</label>
+          <select id="fSvc">
+            <option>Paneles solares</option><option>Instalación eléctrica</option><option>Antena WiFi / redes</option>
+            <option>Combo Casa Solar</option><option>Combo Campo Conectado</option><option>Combo Comercio Sin Cortes</option>
+          </select>
+        </div>
+        <div class="field"><label for="fMsg">Contanos un poco más</label><textarea id="fMsg" rows="3" placeholder="Ej.: Casa de 3 ambientes, techo de chapa, pago mucho de luz en verano."></textarea></div>
+        <button class="btn btn-sun" type="submit">Armar mensaje</button>
+        <div class="preview" id="preview" hidden>
+          <pre id="msgText"></pre>
+          <div class="actions">
+            <a class="btn btn-wa" id="waLink" target="_blank" rel="noopener">Abrir WhatsApp</a>
+            <button class="btn btn-ghost" type="button" id="copyBtn">Copiar mensaje</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    <span>© 2026 LuSolarPin · San Luis, Argentina</span>
+    <span>Energía solar · Instalaciones eléctricas · Redes</span>
+  </footer>
+</div>
+
+<a class="fab" id="fab" href="#contacto" aria-label="Escribinos por WhatsApp">
+  <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2c0 1.3.9 2.5 1.1 2.7.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>
+</a>
+
+<script>
+// Reemplazar con el número real: código de país + área sin 0 + número sin 15. Ej.: "5492664123456"
+const WA_NUMBER = "";
+
+// Horas de sol pico (HSP) aproximadas para San Luis
+const HSP = { anual: 5.5, verano: 6, invierno: 3.5 };
+const PANEL_W = 550, PERF = 0.8, AREA_PER_PANEL = 2.6, CO2_KG_PER_KWH = 0.4;
+const $ = id => document.getElementById(id);
+const fmt = n => n.toLocaleString("es-AR",{maximumFractionDigits:1});
+const season = () => document.querySelector('input[name="season"]:checked').value;
+
+function calc(){
+  const kwh = +$("kwh").value, cover = +$("cover").value / 100, tipo = $("tipo").value;
+  $("kwhOut").textContent = kwh + " kWh";
+  $("coverOut").textContent = Math.round(cover*100) + " %";
+  const target = kwh * cover;
+  const kwp = target / (30 * HSP[season()] * PERF);
+  const panels = Math.max(1, Math.ceil(kwp * 1000 / PANEL_W));
+  const realKwp = panels * PANEL_W / 1000;
+  $("rPanels").textContent = panels;
+  $("rKwp").textContent = fmt(realKwp) + " kWp";
+  $("rArea").textContent = Math.round(panels * AREA_PER_PANEL) + " m²";
+  $("rCo2").textContent = fmt(realKwp * HSP.anual * PERF * 365 * CO2_KG_PER_KWH / 1000) + " t";
+
+  const gen = h => Math.round(realKwp * h * PERF * 30);
+  const ver = gen(HSP.verano), inv = gen(HSP.invierno), max = Math.max(ver, kwh);
+  $("gVer").textContent = ver + " kWh"; $("bVer").style.width = ver / max * 100 + "%";
+  $("gInv").textContent = inv + " kWh"; $("bInv").style.width = inv / max * 100 + "%";
+  $("gCon").textContent = kwh + " kWh"; $("bCon").style.width = kwh / max * 100 + "%";
+  $("rNote").textContent = tipo === "red"
+    ? "Estimación orientativa. En la visita medimos tu techo, la orientación y las sombras para darte el número exacto."
+    : "Estimación orientativa. Los sistemas con baterías se dimensionan además según los días de autonomía que necesites.";
+  $("batLink").hidden = tipo === "red";
+  window.solarDay = { consumo: kwh / 30 * 1000, invierno: inv / 30 * 1000 };
+  if (window.batReady) batCalc();
+}
+["kwh","cover"].forEach(id => $(id).addEventListener("input", calc));
+document.querySelectorAll('input[name="season"]').forEach(r => r.addEventListener("change", calc));
+// Un equipo aislado tiene que alcanzar en invierno, así que lo sugerimos automáticamente
+$("tipo").addEventListener("change", () => {
+  $(($("tipo").value === "red") ? "sAnual" : "sInvierno").checked = true;
+  calc();
+});
+calc();
+
+// ---- Calculadora de baterías ----
+const INV_EFF = 0.9; // pérdidas del inversor
+const DEFAULT_LOADS = [
+  ["Heladera", 1, 45, 14],
+  ["Freezer", 1, 55, 14],
+  ["Luces LED", 6, 9, 4],
+  ["Router WiFi / antena", 1, 12, 14],
+  ["TV", 1, 80, 3],
+  ["Cargadores de celular", 2, 10, 2],
+];
+let loadSeq = 0;
+function addLoad(name = "", qty = 1, w = 0, h = 1){
+  const i = loadSeq++, row = document.createElement("div");
+  row.className = "lrow";
+  row.innerHTML =
+    `<input class="nm" id="ln${i}" type="text" aria-label="Equipo" placeholder="Ej.: Bomba de agua">` +
+    `<input id="lq${i}" type="number" min="0" step="1" aria-label="Cantidad" placeholder="Cant.">` +
+    `<input id="lw${i}" type="number" min="0" step="1" aria-label="Watts" placeholder="W">` +
+    `<input id="lh${i}" type="number" min="0" max="24" step="0.5" aria-label="Horas de noche" placeholder="h">` +
+    `<output>0 Wh</output><button type="button" aria-label="Quitar equipo">×</button>`;
+  row.querySelector(".nm").value = name;
+  row.querySelector(`#lq${i}`).value = qty;
+  row.querySelector(`#lw${i}`).value = w;
+  row.querySelector(`#lh${i}`).value = h;
+  row.querySelector("button").addEventListener("click", () => { row.remove(); batCalc(); });
+  row.addEventListener("input", batCalc);
+  $("loads").append(row);
+}
+DEFAULT_LOADS.forEach(l => addLoad(...l));
+$("addLoad").addEventListener("click", () => { addLoad("", 1, 0, 1); $("loads").lastElementChild.querySelector(".nm").focus(); });
+
+const wh = n => n >= 1000 ? fmt(n / 1000) + " kWh" : Math.round(n) + " Wh";
+function batCalc(){
+  const nightH = +$("nightH").value, days = +$("days").value, dod = +$("chem").value;
+  $("nightHOut").textContent = nightH + " h";
+  $("daysOut").textContent = days === 1 ? "1 noche" : fmt(days) + " noches";
+  let night = 0, peak = 0;
+  $("loads").querySelectorAll(".lrow").forEach(r => {
+    const [q, w, h] = [...r.querySelectorAll("input[type=number]")].map(x => Math.max(0, +x.value || 0));
+    const hrs = Math.min(h, nightH), e = q * w * hrs;
+    r.querySelector("output").textContent = Math.round(e) + " Wh";
+    night += e; if (hrs > 0) peak += q * w;
+  });
+  const usable = night * days / INV_EFF;
+  const nominal = usable / dod;
+  $("bNight").textContent = wh(night);
+  $("bUsable").textContent = wh(usable);
+  $("bNominal").textContent = wh(nominal);
+  $("bPeak").textContent = Math.round(peak) + " W";
+  $("b12").textContent = Math.ceil(nominal / 12) + " Ah";
+  $("b24").textContent = Math.ceil(nominal / 24) + " Ah";
+  $("b48").textContent = Math.ceil(nominal / 48) + " Ah";
+  const s = window.solarDay;
+  $("bDay").textContent = s ? wh(s.consumo) + "/día" : "–";
+  const warns = [];
+  if (s && night > s.consumo) warns.push("El consumo de la noche supera tu consumo diario de la calculadora de arriba. Revisá los kWh del mes.");
+  if (s && s.invierno < s.consumo) warns.push(`En invierno los paneles de arriba generan unos ${wh(s.invierno)} por día, menos de lo que consumís. Para recargar las baterías hacen falta más paneles.`);
+  warns.push("Estimación orientativa. El voltaje del banco, el inversor y el cableado los definimos en la visita.");
+  $("bWarn").textContent = warns.join(" ");
+}
+window.batReady = true;
+["nightH","days","chem"].forEach(id => $(id).addEventListener("input", batCalc));
+batCalc();
+
+$("calcCta").addEventListener("click", () => {
+  $("fSvc").value = "Paneles solares";
+  const sLbl = { anual: "todo el año", verano: "verano", invierno: "invierno" }[season()];
+  $("fMsg").value = `Consumo ${$("kwh").value} kWh/mes. Quiero cubrir ${$("cover").value} % (calculado para ${sLbl}) con un sistema ${$("tipo").selectedOptions[0].text.toLowerCase()}. La calculadora me dio ${$("rPanels").textContent} paneles.`;
+});
+
+if (WA_NUMBER) { $("fab").href = "https://wa.me/" + WA_NUMBER; $("fab").target = "_blank"; }
+else { $("waStatus").textContent = "Número de WhatsApp en preparación. Mientras tanto podés copiar el mensaje."; }
+
+$("form").addEventListener("submit", e => {
+  e.preventDefault();
+  const name = $("fName").value.trim(), city = $("fCity").value.trim(), msg = $("fMsg").value.trim();
+  const text = `Hola LuSolarPin, soy ${name || "(nombre)"} de ${city || "(localidad)"}.\nNecesito: ${$("fSvc").value}.` + (msg ? `\n${msg}` : "");
+  $("msgText").textContent = text;
+  $("preview").hidden = false;
+  const link = $("waLink");
+  if (WA_NUMBER) { link.href = "https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(text); link.hidden = false; }
+  else link.hidden = true;
+});
+
+$("copyBtn").addEventListener("click", () => {
+  const t = $("msgText").textContent, b = $("copyBtn");
+  navigator.clipboard.writeText(t).then(() => { b.textContent = "Copiado"; }).catch(() => {
+    const r = document.createRange(); r.selectNodeContents($("msgText"));
+    const s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = "Seleccionado, copiá con Ctrl+C";
+  });
+  setTimeout(() => b.textContent = "Copiar mensaje", 2500);
+});
+</script>
+
+</body>
+</html>
